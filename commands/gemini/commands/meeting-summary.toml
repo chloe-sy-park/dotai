@@ -1,0 +1,53 @@
+# Meeting Summary command for Gemini CLI
+# Place at ~/.gemini/commands/meeting-summary.toml
+# Run: gemini "/meeting-summary <transcript>"
+
+[meta]
+name = "meeting-summary"
+ai_tool = "gemini"
+command_type = "slash_command"
+category = "productivity"
+tags = ["meeting", "summary", "transcript", "minutes"]
+license = "MIT"
+author = "chloe-sy-park"
+created = "2026-04-25"
+
+[meta.title]
+en = "Meeting Summary"
+ko = "회의록 요약"
+
+[meta.description]
+en = "Summarize a meeting transcript into decisions, action items, and open questions"
+ko = "회의 녹취록을 결정사항·액션아이템·미정사항으로 요약"
+
+# ─── Gemini CLI command ──────────────────────────────────────
+
+description = "Summarize meeting transcript"
+
+prompt = """
+Read the meeting transcript below and produce a structured summary in the same language as the transcript.
+
+## Format
+
+### 📋 Decisions Made / 결정 사항
+- (clear decisions with owner and rationale)
+
+### ✅ Action Items / 액션 아이템
+- [ ] {who} — {what} — by {when}
+
+### 🤔 Open Questions / 미정 사항
+- (unresolved items needing follow-up)
+
+### 💬 Key Discussion Points / 주요 논의
+- (important context, 2-3 bullets max)
+
+## Rules
+- Filter out small talk and tangents.
+- Attribute decisions and actions to specific people by name.
+- If no clear decision/action exists, omit the section — don't pad.
+- Total length under 300 words.
+- Use the transcript's language (Korean transcript → Korean output, etc.)
+
+## Transcript
+{{args}}
+"""

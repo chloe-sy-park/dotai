@@ -1,0 +1,183 @@
+{
+  "generated_at": "2026-04-25T07:40:41.654Z",
+  "version": 1,
+  "count": 6,
+  "assets": [
+    {
+      "id": "claude/skill/ios-swiftui-reviewer",
+      "path": "commands/claude/skills/ios-swiftui-reviewer.md",
+      "raw_url": "https://raw.githubusercontent.com/OWNER/dotai/main/commands/claude/skills/ios-swiftui-reviewer.md",
+      "github_url": "https://github.com/OWNER/dotai/blob/main/commands/claude/skills/ios-swiftui-reviewer.md",
+      "ai_tool": "claude",
+      "command_type": "skill",
+      "category": "coding",
+      "tags": [
+        "swift",
+        "swiftui",
+        "ios",
+        "code-review"
+      ],
+      "title": {
+        "en": "iOS/SwiftUI Code Reviewer",
+        "ko": "iOS/SwiftUI 코드 리뷰어"
+      },
+      "description": {
+        "en": "Reviews SwiftUI code for performance, idiomatic patterns, and common pitfalls",
+        "ko": "SwiftUI 코드의 성능, 관용 패턴, 흔한 실수를 리뷰"
+      },
+      "license": "MIT",
+      "author": "chloe-sy-park",
+      "source_repo": null,
+      "fork_of": null,
+      "created": "2026-04-25T00:00:00.000Z",
+      "size_bytes": 2817
+    },
+    {
+      "id": "claude/skill/korean-writing-helper",
+      "path": "commands/claude/skills/korean-writing-helper.md",
+      "raw_url": "https://raw.githubusercontent.com/OWNER/dotai/main/commands/claude/skills/korean-writing-helper.md",
+      "github_url": "https://github.com/OWNER/dotai/blob/main/commands/claude/skills/korean-writing-helper.md",
+      "ai_tool": "claude",
+      "command_type": "skill",
+      "category": "writing",
+      "tags": [
+        "korean",
+        "writing",
+        "translation",
+        "editing"
+      ],
+      "title": {
+        "en": "Korean Writing Helper",
+        "ko": "한국어 글쓰기 도우미"
+      },
+      "description": {
+        "en": "Polishes Korean writing — fixes translationese, suggests natural phrasing, adjusts formality",
+        "ko": "어색한 번역체 교정, 자연스러운 표현 제안, 말투(격식) 조절"
+      },
+      "license": "MIT",
+      "author": "chloe-sy-park",
+      "source_repo": null,
+      "fork_of": null,
+      "created": "2026-04-25T00:00:00.000Z",
+      "size_bytes": 2287
+    },
+    {
+      "id": "claude/slash_command/standup",
+      "path": "commands/claude/slash/standup.md",
+      "raw_url": "https://raw.githubusercontent.com/OWNER/dotai/main/commands/claude/slash/standup.md",
+      "github_url": "https://github.com/OWNER/dotai/blob/main/commands/claude/slash/standup.md",
+      "ai_tool": "claude",
+      "command_type": "slash_command",
+      "category": "productivity",
+      "tags": [
+        "standup",
+        "daily",
+        "agile",
+        "scrum",
+        "git"
+      ],
+      "title": {
+        "en": "Daily Standup Generator",
+        "ko": "데일리 스탠드업 생성기"
+      },
+      "description": {
+        "en": "Turns rough notes (or recent git activity) into a clean Yesterday/Today/Blockers standup",
+        "ko": "메모 또는 최근 git 활동을 어제/오늘/블로커 스탠드업 포맷으로 정리"
+      },
+      "license": "MIT",
+      "author": "chloe-sy-park",
+      "source_repo": null,
+      "fork_of": null,
+      "created": "2026-04-25T00:00:00.000Z",
+      "size_bytes": 1591
+    },
+    {
+      "id": "cursor/rules/ts-strict",
+      "path": "commands/cursor/rules/ts-strict.mdc",
+      "raw_url": "https://raw.githubusercontent.com/OWNER/dotai/main/commands/cursor/rules/ts-strict.mdc",
+      "github_url": "https://github.com/OWNER/dotai/blob/main/commands/cursor/rules/ts-strict.mdc",
+      "ai_tool": "cursor",
+      "command_type": "rules",
+      "category": "coding",
+      "tags": [
+        "typescript",
+        "strict",
+        "naming",
+        "conventions"
+      ],
+      "title": {
+        "en": "TypeScript Strict + Naming Conventions",
+        "ko": "TypeScript Strict 모드 + 명명 규칙"
+      },
+      "description": {
+        "en": "Enforces strict TypeScript and consistent naming conventions in Cursor",
+        "ko": "TypeScript strict 모드와 일관된 명명 규칙을 Cursor에 적용"
+      },
+      "license": "MIT",
+      "author": "chloe-sy-park",
+      "source_repo": null,
+      "fork_of": null,
+      "created": "2026-04-25T00:00:00.000Z",
+      "size_bytes": 2435
+    },
+    {
+      "id": "gemini/slash_command/meeting-summary",
+      "path": "commands/gemini/commands/meeting-summary.toml",
+      "raw_url": "https://raw.githubusercontent.com/OWNER/dotai/main/commands/gemini/commands/meeting-summary.toml",
+      "github_url": "https://github.com/OWNER/dotai/blob/main/commands/gemini/commands/meeting-summary.toml",
+      "ai_tool": "gemini",
+      "command_type": "slash_command",
+      "category": "productivity",
+      "tags": [
+        "meeting",
+        "summary",
+        "transcript",
+        "minutes"
+      ],
+      "title": {
+        "en": "Meeting Summary",
+        "ko": "회의록 요약"
+      },
+      "description": {
+        "en": "Summarize a meeting transcript into decisions, action items, and open questions",
+        "ko": "회의 녹취록을 결정사항·액션아이템·미정사항으로 요약",
+        "description": "Summarize meeting transcript",
+        "prompt": "Read the meeting transcript below and produce a structured summary in the same language as the transcript.\n\n## Format\n\n### 📋 Decisions Made / 결정 사항\n- (clear decisions with owner and rationale)\n\n### ✅ Action Items / 액션 아이템\n- [ ] {who} — {what} — by {when}\n\n### 🤔 Open Questions / 미정 사항\n- (unresolved items needing follow-up)\n\n### 💬 Key Discussion Points / 주요 논의\n- (important context, 2-3 bullets max)\n\n## Rules\n- Filter out small talk and tangents.\n- Attribute decisions and actions to specific people by name.\n- If no clear decision/action exists, omit the section — don't pad.\n- Total length under 300 words.\n- Use the transcript's language (Korean transcript → Korean output, etc.)\n\n## Transcript\n{{args}}\n"
+      },
+      "license": "MIT",
+      "author": "chloe-sy-park",
+      "source_repo": null,
+      "fork_of": null,
+      "created": "2026-04-25",
+      "size_bytes": 1590
+    },
+    {
+      "id": "opencode/agent/commit-msg",
+      "path": "commands/opencode/agents/commit-msg.md",
+      "raw_url": "https://raw.githubusercontent.com/OWNER/dotai/main/commands/opencode/agents/commit-msg.md",
+      "github_url": "https://github.com/OWNER/dotai/blob/main/commands/opencode/agents/commit-msg.md",
+      "ai_tool": "opencode",
+      "command_type": "agent",
+      "category": "coding",
+      "tags": [
+        "git",
+        "commit",
+        "conventional-commits"
+      ],
+      "title": {
+        "en": "Commit Message Generator",
+        "ko": "커밋 메시지 생성기"
+      },
+      "description": {
+        "en": "Analyzes staged diff and writes a Conventional Commits message",
+        "ko": "스테이지된 diff를 분석해 Conventional Commits 메시지 작성"
+      },
+      "license": "MIT",
+      "author": "chloe-sy-park",
+      "source_repo": null,
+      "fork_of": null,
+      "created": "2026-04-25T00:00:00.000Z",
+      "size_bytes": 1874
+    }
+  ]
+}

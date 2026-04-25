@@ -1,0 +1,63 @@
+name: 📦 New command request
+description: Request a command you'd like to see in the catalog
+title: "[command] "
+labels: ["command-request", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Want to request a command but not sure how to write it yourself? File this and someone may pick it up.
+        직접 만들기 어려운 명령어를 요청하세요. 누군가 구현할 수도 있어요.
+
+  - type: input
+    id: command_name
+    attributes:
+      label: Command name (suggested)
+      description: kebab-case, descriptive
+      placeholder: e.g. python-test-generator
+    validations:
+      required: true
+
+  - type: dropdown
+    id: ai_tool
+    attributes:
+      label: AI tool
+      options:
+        - claude
+        - gemini
+        - opencode
+        - cursor
+        - copilot
+        - aider
+        - any (cross-tool)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: command_type
+    attributes:
+      label: Command type
+      options:
+        - skill
+        - slash_command
+        - rules
+        - agent
+        - plugin
+    validations:
+      required: true
+
+  - type: textarea
+    id: what
+    attributes:
+      label: What should it do?
+      placeholder: Describe the behavior, inputs, and output
+    validations:
+      required: true
+
+  - type: textarea
+    id: example
+    attributes:
+      label: Example use case
+      placeholder: "Example: I want to..."
+    validations:
+      required: false

@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Discussions
+    url: https://github.com/chloe-sy-park/dotai/discussions
+    about: Questions, show & tell, or general chat
+  - name: 🌐 Browse the catalog
+    url: https://dotai.dev
+    about: Find existing commands before requesting new ones

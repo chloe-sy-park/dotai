@@ -1,0 +1,44 @@
+name: 🐛 Bug report
+description: Something on the site or in a command isn't working
+title: "[bug] "
+labels: ["bug", "needs-triage"]
+body:
+  - type: dropdown
+    id: where
+    attributes:
+      label: Where is the bug?
+      options:
+        - Site (dotai.dev)
+        - A specific command (please link)
+        - Build / workflow
+        - Documentation
+    validations:
+      required: true
+
+  - type: textarea
+    id: what_happened
+    attributes:
+      label: What happened?
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: How to reproduce
+      placeholder: |
+        1.
+        2.
+        3.
+
+  - type: input
+    id: env
+    attributes:
+      label: Environment (browser / OS / AI tool version, if relevant)

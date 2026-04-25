@@ -1,0 +1,63 @@
+---
+name: ts-strict
+title:
+  en: TypeScript Strict + Naming Conventions
+  ko: TypeScript Strict 모드 + 명명 규칙
+description:
+  en: Enforces strict TypeScript and consistent naming conventions in Cursor
+  ko: TypeScript strict 모드와 일관된 명명 규칙을 Cursor에 적용
+ai_tool: cursor
+command_type: rules
+category: coding
+tags: [typescript, strict, naming, conventions]
+license: MIT
+author: chloe-sy-park
+created: 2026-04-25
+description-cursor: TypeScript strict mode + naming conventions
+globs: ["**/*.ts", "**/*.tsx"]
+alwaysApply: true
+---
+
+# TypeScript Strict + Naming Conventions
+
+## Type safety
+
+- **No `any`.** Use `unknown` and narrow with type guards or `satisfies`.
+- **No non-null assertions (`!`).** Use proper guards or default values.
+- **`readonly`** on arrays and properties when mutation isn't needed.
+- **Discriminated unions** over optional fields when state is exclusive.
+  - ✅ `{ status: 'loading' } | { status: 'ok'; data: T } | { status: 'err'; error: E }`
+  - ❌ `{ loading: boolean; data?: T; error?: E }`
+- **`satisfies`** over `as` assertions where the constraint is known at definition time.
+
+## Naming
+
+| Kind | Convention | Example |
+|---|---|---|
+| Variables, functions | `camelCase` | `getUserName` |
+| Types, interfaces, classes | `PascalCase` | `UserProfile` |
+| Constants (true constants only) | `SCREAMING_SNAKE` | `MAX_RETRIES` |
+| Component files | `PascalCase.tsx` | `UserCard.tsx` |
+| Utility files | `kebab-case.ts` | `format-date.ts` |
+| Booleans | `is/has/should/can` prefix | `isLoading`, `hasError` |
+| Event handlers | `handle*` for impl, `on*` for prop | `handleClick`, `onClick` |
+
+## Imports
+
+- Absolute imports via `@/` path alias (configure in `tsconfig.json`).
+- Group order: external → internal absolute → relative → types.
+- No default exports for utilities (named only).
+- Default exports OK for Next.js pages and React components consumed via lazy/dynamic.
+
+## Async
+
+- Async functions return `Promise<T>` — annotate explicitly when not obvious.
+- Always handle rejection paths; no floating promises.
+- Prefer `for await` over chained `.then()` for sequences.
+
+## React/JSX (when applicable)
+
+- Function components only. No class components.
+- Props interface named `<ComponentName>Props`, defined above the component.
+- Destructure props in the parameter list.
+- No inline anonymous functions in JSX props for hot lists (use `useCallback` or hoist).
