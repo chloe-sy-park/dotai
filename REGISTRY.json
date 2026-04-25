@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-04-25T07:40:41.654Z",
+  "generated_at": "2026-04-25T07:44:33.032Z",
   "version": 1,
   "count": 6,
   "assets": [
     {
       "id": "claude/skill/ios-swiftui-reviewer",
       "path": "commands/claude/skills/ios-swiftui-reviewer.md",
-      "raw_url": "https://raw.githubusercontent.com/OWNER/dotai/main/commands/claude/skills/ios-swiftui-reviewer.md",
-      "github_url": "https://github.com/OWNER/dotai/blob/main/commands/claude/skills/ios-swiftui-reviewer.md",
+      "raw_url": "https://raw.githubusercontent.com/chloe-sy-park/dotai/main/commands/claude/skills/ios-swiftui-reviewer.md",
+      "github_url": "https://github.com/chloe-sy-park/dotai/blob/main/commands/claude/skills/ios-swiftui-reviewer.md",
       "ai_tool": "claude",
       "command_type": "skill",
       "category": "coding",
@@ -35,8 +35,8 @@
     {
       "id": "claude/skill/korean-writing-helper",
       "path": "commands/claude/skills/korean-writing-helper.md",
-      "raw_url": "https://raw.githubusercontent.com/OWNER/dotai/main/commands/claude/skills/korean-writing-helper.md",
-      "github_url": "https://github.com/OWNER/dotai/blob/main/commands/claude/skills/korean-writing-helper.md",
+      "raw_url": "https://raw.githubusercontent.com/chloe-sy-park/dotai/main/commands/claude/skills/korean-writing-helper.md",
+      "github_url": "https://github.com/chloe-sy-park/dotai/blob/main/commands/claude/skills/korean-writing-helper.md",
       "ai_tool": "claude",
       "command_type": "skill",
       "category": "writing",
@@ -64,8 +64,8 @@
     {
       "id": "claude/slash_command/standup",
       "path": "commands/claude/slash/standup.md",
-      "raw_url": "https://raw.githubusercontent.com/OWNER/dotai/main/commands/claude/slash/standup.md",
-      "github_url": "https://github.com/OWNER/dotai/blob/main/commands/claude/slash/standup.md",
+      "raw_url": "https://raw.githubusercontent.com/chloe-sy-park/dotai/main/commands/claude/slash/standup.md",
+      "github_url": "https://github.com/chloe-sy-park/dotai/blob/main/commands/claude/slash/standup.md",
       "ai_tool": "claude",
       "command_type": "slash_command",
       "category": "productivity",
@@ -94,8 +94,8 @@
     {
       "id": "cursor/rules/ts-strict",
       "path": "commands/cursor/rules/ts-strict.mdc",
-      "raw_url": "https://raw.githubusercontent.com/OWNER/dotai/main/commands/cursor/rules/ts-strict.mdc",
-      "github_url": "https://github.com/OWNER/dotai/blob/main/commands/cursor/rules/ts-strict.mdc",
+      "raw_url": "https://raw.githubusercontent.com/chloe-sy-park/dotai/main/commands/cursor/rules/ts-strict.mdc",
+      "github_url": "https://github.com/chloe-sy-park/dotai/blob/main/commands/cursor/rules/ts-strict.mdc",
       "ai_tool": "cursor",
       "command_type": "rules",
       "category": "coding",
@@ -123,8 +123,8 @@
     {
       "id": "gemini/slash_command/meeting-summary",
       "path": "commands/gemini/commands/meeting-summary.toml",
-      "raw_url": "https://raw.githubusercontent.com/OWNER/dotai/main/commands/gemini/commands/meeting-summary.toml",
-      "github_url": "https://github.com/OWNER/dotai/blob/main/commands/gemini/commands/meeting-summary.toml",
+      "raw_url": "https://raw.githubusercontent.com/chloe-sy-park/dotai/main/commands/gemini/commands/meeting-summary.toml",
+      "github_url": "https://github.com/chloe-sy-park/dotai/blob/main/commands/gemini/commands/meeting-summary.toml",
       "ai_tool": "gemini",
       "command_type": "slash_command",
       "category": "productivity",
@@ -154,8 +154,8 @@
     {
       "id": "opencode/agent/commit-msg",
       "path": "commands/opencode/agents/commit-msg.md",
-      "raw_url": "https://raw.githubusercontent.com/OWNER/dotai/main/commands/opencode/agents/commit-msg.md",
-      "github_url": "https://github.com/OWNER/dotai/blob/main/commands/opencode/agents/commit-msg.md",
+      "raw_url": "https://raw.githubusercontent.com/chloe-sy-park/dotai/main/commands/opencode/agents/commit-msg.md",
+      "github_url": "https://github.com/chloe-sy-park/dotai/blob/main/commands/opencode/agents/commit-msg.md",
       "ai_tool": "opencode",
       "command_type": "agent",
       "category": "coding",
