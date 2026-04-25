@@ -1,0 +1,44 @@
+---
+import { localePath, type Locale } from "../i18n/messages";
+import type { Asset } from "../lib/registry";
+
+interface Props {
+  asset: Asset;
+  locale: Locale;
+}
+const { asset, locale } = Astro.props;
+const title = locale === "ko" ? (asset.title.ko ?? asset.title.en) : asset.title.en;
+const desc =
+  locale === "ko" ? (asset.description.ko ?? asset.description.en) : asset.description.en;
+const detailHref = localePath(locale, `/asset/${asset.id}`);
+---
+
+<a
+  href={detailHref}
+  class="block rounded-lg border border-zinc-200 bg-white p-4 transition hover:border-zinc-400 hover:shadow-sm"
+>
+  <div class="flex items-baseline justify-between gap-3">
+    <h2 class="text-base font-semibold">{title}</h2>
+    <span class="shrink-0 text-xs uppercase tracking-wide text-zinc-500">
+      {asset.ai_tool ?? "mcp"} · {asset.command_type ?? asset.asset_type}
+    </span>
+  </div>
+  <p class="mt-1 text-sm text-zinc-600">{desc}</p>
+  <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-zinc-500">
+    <span>{asset.author}</span>
+    <span>·</span>
+    <span>{asset.license}</span>
+    {
+      asset.tags.length > 0 && (
+        <>
+          <span>·</span>
+          <span class="flex flex-wrap gap-1">
+            {asset.tags.slice(0, 4).map((tag) => (
+              <span class="rounded bg-zinc-100 px-1.5 py-0.5">{tag}</span>
+            ))}
+          </span>
+        </>
+      )
+    }
+  </div>
+</a>

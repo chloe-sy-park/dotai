@@ -1,0 +1,140 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Header from "../../components/Header.astro";
+import AssetCard from "../../components/AssetCard.astro";
+import { registry } from "../../lib/registry";
+import { getFilterOptions, searchableText } from "../../lib/filters";
+import { t } from "../../i18n/messages";
+
+const locale = "ko";
+const i = t(locale);
+const options = getFilterOptions();
+
+const fusePayload = registry.assets.map((a) => ({
+  id: a.id,
+  title_en: a.title.en,
+  title_ko: a.title.ko ?? "",
+  description_en: a.description.en,
+  description_ko: a.description.ko ?? "",
+  tags: a.tags,
+}));
+---
+
+<Layout title={`${i.browse} — ${i.site_title}`} locale={locale}>
+  <Header locale={locale} />
+
+  <main class="mx-auto max-w-5xl px-6 py-10">
+    <div class="mb-6 grid gap-3 md:grid-cols-[1fr_auto_auto_auto]">
+      <input
+        id="search"
+        type="search"
+        placeholder={i.search_placeholder}
+        class="rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-zinc-500 focus:outline-none"
+      />
+      <select id="filter-ai_tool" class="rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm">
+        <option value="">{i.filter_ai_tool}: {i.filter_all}</option>
+        {options.ai_tools.map((v) => <option value={v}>{v}</option>)}
+      </select>
+      <select id="filter-command_type" class="rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm">
+        <option value="">{i.filter_command_type}: {i.filter_all}</option>
+        {options.command_types.map((v) => <option value={v}>{v}</option>)}
+      </select>
+      <select id="filter-category" class="rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm">
+        <option value="">{i.filter_category}: {i.filter_all}</option>
+        {options.categories.map((v) => <option value={v}>{v}</option>)}
+      </select>
+    </div>
+
+    <p id="empty" class="hidden py-8 text-center text-sm text-zinc-500">{i.no_results}</p>
+
+    <ul id="cards" class="grid gap-3">
+      {registry.assets.map((asset) => (
+        <li
+          data-id={asset.id}
+          data-ai-tool={asset.ai_tool ?? ""}
+          data-command-type={asset.command_type ?? ""}
+          data-category={asset.category ?? ""}
+          data-search={searchableText(asset)}
+        >
+          <AssetCard asset={asset} locale={locale} />
+        </li>
+      ))}
+    </ul>
+  </main>
+
+  <script type="application/json" id="fuse-data" set:html={JSON.stringify(fusePayload)} />
+  <script>
+    import Fuse from "fuse.js";
+
+    type Doc = {
+      id: string;
+      title_en: string;
+      title_ko: string;
+      description_en: string;
+      description_ko: string;
+      tags: string[];
+    };
+
+    const dataEl = document.getElementById("fuse-data");
+    const docs: Doc[] = dataEl ? JSON.parse(dataEl.textContent ?? "[]") : [];
+    const fuse = new Fuse(docs, {
+      keys: ["title_en", "title_ko", "description_en", "description_ko", "tags"],
+      threshold: 0.4,
+      ignoreLocation: true,
+    });
+
+    const search = document.getElementById("search") as HTMLInputElement;
+    const filterAi = document.getElementById("filter-ai_tool") as HTMLSelectElement;
+    const filterType = document.getElementById("filter-command_type") as HTMLSelectElement;
+    const filterCat = document.getElementById("filter-category") as HTMLSelectElement;
+    const cards = Array.from(document.querySelectorAll<HTMLLIElement>("#cards > li"));
+    const empty = document.getElementById("empty")!;
+
+    const params = new URLSearchParams(window.location.search);
+    if (params.has("q")) search.value = params.get("q")!;
+    if (params.has("ai_tool")) filterAi.value = params.get("ai_tool")!;
+    if (params.has("command_type")) filterType.value = params.get("command_type")!;
+    if (params.has("category")) filterCat.value = params.get("category")!;
+
+    function syncUrl() {
+      const next = new URLSearchParams();
+      if (search.value) next.set("q", search.value);
+      if (filterAi.value) next.set("ai_tool", filterAi.value);
+      if (filterType.value) next.set("command_type", filterType.value);
+      if (filterCat.value) next.set("category", filterCat.value);
+      const qs = next.toString();
+      const url = qs ? `${window.location.pathname}?${qs}` : window.location.pathname;
+      window.history.replaceState({}, "", url);
+    }
+
+    function apply() {
+      const q = search.value.trim();
+      const matchedIds = q
+        ? new Set(fuse.search(q).map((r) => r.item.id))
+        : null;
+      const ai = filterAi.value;
+      const ct = filterType.value;
+      const cat = filterCat.value;
+
+      let visible = 0;
+      for (const card of cards) {
+        const id = card.dataset.id!;
+        const okSearch = !matchedIds || matchedIds.has(id);
+        const okAi = !ai || card.dataset.aiTool === ai;
+        const okCt = !ct || card.dataset.commandType === ct;
+        const okCat = !cat || card.dataset.category === cat;
+        const show = okSearch && okAi && okCt && okCat;
+        card.classList.toggle("hidden", !show);
+        if (show) visible++;
+      }
+      empty.classList.toggle("hidden", visible !== 0);
+      syncUrl();
+    }
+
+    search.addEventListener("input", apply);
+    filterAi.addEventListener("change", apply);
+    filterType.addEventListener("change", apply);
+    filterCat.addEventListener("change", apply);
+    apply();
+  </script>
+</Layout>

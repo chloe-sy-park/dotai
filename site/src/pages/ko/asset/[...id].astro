@@ -1,0 +1,105 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import Header from "../../../components/Header.astro";
+import { registry } from "../../../lib/registry";
+import { localePath, t } from "../../../i18n/messages";
+
+export function getStaticPaths() {
+  return registry.assets.map((asset) => ({
+    params: { id: asset.id },
+    props: { asset },
+  }));
+}
+
+const { asset } = Astro.props;
+const locale = "ko";
+const i = t(locale);
+const title = asset.title.ko ?? asset.title.en;
+const desc = asset.description.ko ?? asset.description.en;
+---
+
+<Layout title={`${title} — ${i.site_title}`} locale={locale}>
+  <Header locale={locale} />
+
+  <main class="mx-auto max-w-3xl px-6 py-10">
+    <a
+      href={localePath(locale, "/browse")}
+      class="text-sm text-zinc-500 hover:text-zinc-900"
+    >
+      {i.back_to_browse}
+    </a>
+
+    <header class="mt-4">
+      <h1 class="text-3xl font-bold tracking-tight">{title}</h1>
+      <p class="mt-2 text-base text-zinc-600">{desc}</p>
+    </header>
+
+    <div class="mt-6 flex flex-wrap gap-2">
+      <a
+        href={asset.raw_url}
+        class="rounded-md bg-zinc-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-zinc-700"
+        download
+      >
+        {i.download_raw}
+      </a>
+      <a
+        href={asset.github_url}
+        target="_blank"
+        rel="noopener"
+        class="rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium text-zinc-700 hover:bg-zinc-100"
+      >
+        {i.view_on_github}
+      </a>
+    </div>
+
+    <section class="mt-8">
+      <h2 class="text-sm font-semibold uppercase tracking-wide text-zinc-500">
+        {i.metadata}
+      </h2>
+      <dl class="mt-3 grid grid-cols-[max-content_1fr] gap-x-6 gap-y-2 text-sm">
+        <dt class="text-zinc-500">{i.asset_type_label}</dt>
+        <dd>
+          {asset.asset_type}
+          {asset.ai_tool && ` · ${asset.ai_tool}`}
+          {asset.command_type && ` · ${asset.command_type}`}
+          {asset.category && ` · ${asset.category}`}
+        </dd>
+        <dt class="text-zinc-500">{i.author_label}</dt>
+        <dd>{asset.author}</dd>
+        <dt class="text-zinc-500">{i.license_label}</dt>
+        <dd>{asset.license}</dd>
+        {asset.created && (
+          <>
+            <dt class="text-zinc-500">{i.created_label}</dt>
+            <dd>{String(asset.created).slice(0, 10)}</dd>
+          </>
+        )}
+        {asset.tags.length > 0 && (
+          <>
+            <dt class="text-zinc-500">{i.tags_label}</dt>
+            <dd class="flex flex-wrap gap-1">
+              {asset.tags.map((tag) => (
+                <span class="rounded bg-zinc-100 px-1.5 py-0.5 text-xs">{tag}</span>
+              ))}
+            </dd>
+          </>
+        )}
+        {asset.source_repo && (
+          <>
+            <dt class="text-zinc-500">Source</dt>
+            <dd>
+              <a
+                href={asset.source_repo}
+                target="_blank"
+                rel="noopener"
+                class="text-zinc-700 underline hover:text-zinc-900"
+              >
+                {asset.source_repo}
+              </a>
+            </dd>
+          </>
+        )}
+      </dl>
+    </section>
+  </main>
+</Layout>

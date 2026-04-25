@@ -1,0 +1,46 @@
+---
+import { t, localePath, toggleLocale, type Locale } from "../i18n/messages";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const i = t(locale);
+const currentPath = Astro.url.pathname;
+const toggle = toggleLocale(locale, currentPath);
+---
+
+<header class="border-b border-zinc-200 bg-white">
+  <div class="mx-auto flex max-w-5xl items-center justify-between gap-4 px-6 py-4">
+    <a href={localePath(locale, "/")} class="text-lg font-bold tracking-tight">
+      {i.site_title}
+    </a>
+    <nav class="flex items-center gap-5 text-sm">
+      <a href={localePath(locale, "/browse")} class="text-zinc-600 hover:text-zinc-900">
+        {i.browse}
+      </a>
+      <a
+        href="https://github.com/chloe-sy-park/dotai/issues?q=label%3Aidea"
+        target="_blank"
+        rel="noopener"
+        class="text-zinc-600 hover:text-zinc-900"
+      >
+        {i.ideas}
+      </a>
+      <a
+        href="https://github.com/chloe-sy-park/dotai"
+        target="_blank"
+        rel="noopener"
+        class="text-zinc-600 hover:text-zinc-900"
+      >
+        GitHub
+      </a>
+      <a
+        href={toggle.href}
+        class="rounded border border-zinc-300 px-2 py-0.5 text-xs uppercase tracking-wide text-zinc-600 hover:bg-zinc-100"
+      >
+        {toggle.locale}
+      </a>
+    </nav>
+  </div>
+</header>
