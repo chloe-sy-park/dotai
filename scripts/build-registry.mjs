@@ -40,6 +40,18 @@ const VALID_LICENSES = new Set([
   "Unlicense", "CC0-1.0", "ISC", "MPL-2.0", "AGPL-3.0",
 ]);
 
+// Folder name (level 2 under commands/<ai_tool>/) → command_type.
+// Multiple folder names can map to the same type (e.g. claude uses `slash/`,
+// gemini uses `commands/`, both are `slash_command`).
+const FOLDER_TO_COMMAND_TYPE = {
+  skills: "skill",
+  slash: "slash_command",
+  commands: "slash_command",
+  rules: "rules",
+  agents: "agent",
+  plugins: "plugin",
+};
+
 // ─── Walk ────────────────────────────────────────────────────
 
 async function* walk(dir) {
@@ -79,27 +91,70 @@ async function parseFile(path) {
   return { ...fm.data, content: raw };
 }
 
+// ─── Asset type detection ────────────────────────────────────
+
+function detectAssetType(relPath) {
+  const top = relPath.split("/")[0];
+  if (top === "mcp-servers") return "mcp_server";
+  if (top === "commands") return "command";
+  return null;
+}
+
 // ─── Validate ────────────────────────────────────────────────
 
-function validate(meta, path) {
+function validateCommon(meta) {
   const errors = [];
-  const required = ["name", "ai_tool", "command_type", "category", "license", "author"];
-  for (const f of required) {
+  for (const f of ["name", "license", "author"]) {
     if (!meta[f]) errors.push(`missing field: ${f}`);
   }
   if (!meta.title?.en) errors.push("missing field: title.en");
   if (!meta.description?.en) errors.push("missing field: description.en");
+  if (meta.license && !VALID_LICENSES.has(meta.license))
+    errors.push(`invalid SPDX license: ${meta.license} (add to whitelist if intentional)`);
+  if (meta.category && !VALID_CATEGORIES.has(meta.category))
+    errors.push(`invalid category: ${meta.category}`);
+  return errors;
+}
 
+function validateCommand(meta, relPath) {
+  const errors = validateCommon(meta);
+  for (const f of ["ai_tool", "command_type", "category"]) {
+    if (!meta[f]) errors.push(`missing field: ${f}`);
+  }
   if (meta.ai_tool && !VALID_AI_TOOLS.has(meta.ai_tool))
     errors.push(`invalid ai_tool: ${meta.ai_tool}`);
   if (meta.command_type && !VALID_COMMAND_TYPES.has(meta.command_type))
     errors.push(`invalid command_type: ${meta.command_type}`);
-  if (meta.category && !VALID_CATEGORIES.has(meta.category))
-    errors.push(`invalid category: ${meta.category}`);
-  if (meta.license && !VALID_LICENSES.has(meta.license))
-    errors.push(`invalid SPDX license: ${meta.license} (add to whitelist if intentional)`);
 
-  // filename = name
+  // Folder location must match metadata.
+  // Expected layout: commands/<ai_tool>/<folder>/<file>
+  const parts = relPath.split("/");
+  if (parts.length < 4) {
+    errors.push(`command files must live at commands/<ai_tool>/<folder>/<file>, got ${relPath}`);
+  } else {
+    const [, folderAiTool, folder] = parts;
+    if (meta.ai_tool && folderAiTool !== meta.ai_tool) {
+      errors.push(`folder ai_tool "${folderAiTool}" does not match metadata "${meta.ai_tool}"`);
+    }
+    const expectedType = FOLDER_TO_COMMAND_TYPE[folder];
+    if (!expectedType) {
+      errors.push(`unknown folder "${folder}" — add it to FOLDER_TO_COMMAND_TYPE if intentional`);
+    } else if (meta.command_type && expectedType !== meta.command_type) {
+      errors.push(`folder "${folder}" implies command_type "${expectedType}" but metadata says "${meta.command_type}"`);
+    }
+  }
+  return errors;
+}
+
+function validateMcpServer(meta) {
+  return validateCommon(meta);
+}
+
+function validate(meta, path, assetType) {
+  const relPath = relative(ROOT, path).replaceAll("\\", "/");
+  const errors =
+    assetType === "mcp_server" ? validateMcpServer(meta) : validateCommand(meta, relPath);
+
   const expectedName = basename(path, extname(path));
   if (meta.name && meta.name !== expectedName)
     errors.push(`filename "${expectedName}" must match name "${meta.name}"`);
@@ -109,16 +164,21 @@ function validate(meta, path) {
 
 // ─── Build entry ─────────────────────────────────────────────
 
-function buildEntry(meta, path, repoOwner, repoName, branch = "main") {
+function buildEntry(meta, path, assetType, repoOwner, repoName, branch = "main") {
   const rel = relative(ROOT, path).replaceAll("\\", "/");
+  const id =
+    assetType === "mcp_server"
+      ? `mcp_server/${meta.name}`
+      : `${meta.ai_tool}/${meta.command_type}/${meta.name}`;
   return {
-    id: `${meta.ai_tool}/${meta.command_type}/${meta.name}`,
+    id,
+    asset_type: assetType,
     path: rel,
     raw_url: `https://raw.githubusercontent.com/${repoOwner}/${repoName}/${branch}/${rel}`,
     github_url: `https://github.com/${repoOwner}/${repoName}/blob/${branch}/${rel}`,
-    ai_tool: meta.ai_tool,
-    command_type: meta.command_type,
-    category: meta.category,
+    ai_tool: meta.ai_tool ?? null,
+    command_type: meta.command_type ?? null,
+    category: meta.category ?? null,
     tags: meta.tags ?? [],
     title: meta.title,
     description: meta.description,
@@ -151,13 +211,22 @@ async function main() {
       if (basename(path) === ".gitkeep") continue;
 
       try {
-        const meta = await parseFile(path);
-        const errors = validate(meta, path);
-        if (errors.length) {
-          allErrors.push({ path: relative(ROOT, path), errors });
+        const relPath = relative(ROOT, path).replaceAll("\\", "/");
+        const assetType = detectAssetType(relPath);
+        if (!assetType) {
+          allErrors.push({
+            path: relPath,
+            errors: [`file is outside known top-level dirs (${SCAN_DIRS.join(", ")})`],
+          });
           continue;
         }
-        assets.push(buildEntry(meta, path, repoOwner, repoName, branch));
+        const meta = await parseFile(path);
+        const errors = validate(meta, path, assetType);
+        if (errors.length) {
+          allErrors.push({ path: relPath, errors });
+          continue;
+        }
+        assets.push(buildEntry(meta, path, assetType, repoOwner, repoName, branch));
       } catch (err) {
         allErrors.push({
           path: relative(ROOT, path),
